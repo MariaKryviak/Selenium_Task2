@@ -38,8 +38,13 @@ public class DriverManager {
     }
 
     public void waitForElementVisible(By by) {
-        (new WebDriverWait(DriverManager.getInstance().getWebDriver(), 3))
+        (new WebDriverWait(DriverManager.getInstance().getWebDriver(), 5))
                 .until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    public void waitForElementIsNotVisible(By by) {
+        (new WebDriverWait(DriverManager.getInstance().getWebDriver(), 5))
+                .until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
     public void closeWebDriver() {

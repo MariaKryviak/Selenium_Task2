@@ -10,11 +10,13 @@ import org.testng.annotations.Test;
 public class GmailTest {
 
     @Test
-    private void searchSomeWordInGoogle() {
+    public void searchSomeWordInGoogle() {
+        final String MSG_TITLE = "Hello";
         new LoginBO().login("testmy12341234", "1234test1234My");
-        new MailboxBO().sentLetter("kryviakmaria@gmail.com", "Hello", "How are you?");
+        MailboxBO mailboxBO = new MailboxBO();
+        mailboxBO.sendLetter("kryviakmaria@gmail.com", MSG_TITLE, "How are you?");
 
-        Assert.assertEquals("Hello", new MailboxBO().checkIfLetterIsSend());
+        Assert.assertTrue(mailboxBO.assertMessageSent(MSG_TITLE), MSG_TITLE);
     }
 
     @AfterTest

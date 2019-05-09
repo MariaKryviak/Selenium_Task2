@@ -5,6 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class MailboxPage {
     private static Logger logger = LogManager.getLogger(MailboxPage.class);
@@ -15,9 +18,9 @@ public class MailboxPage {
     private By subjectToTextFieldLocator = By.xpath("//input[@name='subjectbox']");
     private By messageToTextFieldLocator = By.xpath("//div[@role='textbox']");
     private By clickSentMessageButtonLocator = By.xpath("//div[@role='button'and@tabindex='1'and@data-tooltip-delay='800']");
-    private By clickSendMessageButtonLocator = By.xpath("//a[@target='_top'and@title='Sent']");
-    private By clickToViewMessageDetailButtonLocator = By.xpath("//tbody/tr[@draggable='true'][2]");
-    private By checkIfMessageIsSendButtonLocator = By.xpath("//h2[text()='Hello']");
+    private By clickSendMessageLinkLocator = By.xpath("//a[@target='_top'and@title='Sent']");
+    private By checkIfMessageIsSendButtonLocator = By.cssSelector("tbody div .bog");
+    private By undoLinkLocator = By.cssSelector("#link_undo[style='visibility:hidden']");
 
     public void clickCreateNewLetterButton() {
         DriverManager.getInstance().waitForElementVisible(clickCreateNewLetterButtonLocator);
@@ -49,22 +52,17 @@ public class MailboxPage {
         logger.info("Click to the 'Send' button to sent the message");
     }
 
-    public void clickSenTMessageButton() {
-        DriverManager.getInstance().waitForElementVisible(clickSendMessageButtonLocator);
-        webDriver.findElement(clickSendMessageButtonLocator).click();
-        logger.info("Click to the 'Sent' button to view all send message");
+    /**
+     * Click on 'Sent' menu item to view sent messages.
+     */
+    public void clickSenTMessageLink() {
+        DriverManager.getInstance().waitForElementVisible(clickSendMessageLinkLocator);
+        webDriver.findElement(clickSendMessageLinkLocator).click();
+        logger.info("Click to the 'Sent' link to view all send message");
     }
 
-    public void clickToViewMessageDetail() {
-        DriverManager.getInstance().waitForElementVisible(clickToViewMessageDetailButtonLocator);
-        webDriver.findElement(clickToViewMessageDetailButtonLocator).click();
-        logger.info("Click to some message button to view detail");
-    }
-
-    public String checkIfMessageIsSend() {
-        DriverManager.getInstance().waitForElementVisible(checkIfMessageIsSendButtonLocator);
-        String message = webDriver.findElement(checkIfMessageIsSendButtonLocator).getText();
-        logger.info("Check if the message was sent");
-        return message;
+    public List<WebElement> getMessageTitles() {
+        DriverManager.getInstance().waitForElementIsNotVisible(undoLinkLocator);
+        return webDriver.findElements(checkIfMessageIsSendButtonLocator);
     }
 }
